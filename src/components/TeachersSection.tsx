@@ -1,68 +1,80 @@
-
-import { useRef, useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Teacher {
   id: number;
   name: string;
-  subject: string;
-  degree: string;
   image: string;
 }
 
 export const TeachersSection = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [teachers] = useState<Teacher[]>([
+    {
+      id: 1,
+      name: "Madhav Tripathi",
+      image: "/Teachers/Madhav Tripathi.jpeg"
+    },
+    {
+      id: 2,
+      name: "JP Shukla",
+      image: "/Teachers/JP Shukla.jpeg"
+    },
+    {
+      id: 3,
+      name: "Abid Ali",
+      image: "/Teachers/Abid Ali.jpeg"
+    },
+    {
+      id: 4,
+      name: "KN Pandey",
+      image: "/Teachers/KN Pandey.jpeg"
+    },
+    {
+      id: 5,
+      name: "Mamta Tiwari",
+      image: "/Teachers/Mamta Tiwari.jpg"
+    },
+    {
+      id: 6,
+      name: "Nigam",
+      image: "/Teachers/Nigam.jpg"
+    }
+  ]);
 
-  useEffect(() => {
-    // Get teachers from localStorage
-    const storedTeachers = JSON.parse(localStorage.getItem('teachers') || '[]');
-    setTeachers(storedTeachers);
-  }, []);
-
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const scroll = () => {
-      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
-        scrollContainer.scrollLeft = 0;
-      } else {
-        scrollContainer.scrollLeft += 1;
-      }
-    };
-
-    // Only enable auto-scroll if there are more than 4 teachers
-    const intervalId = teachers.length > 4 ? setInterval(scroll, 30) : null;
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [teachers.length]);
+  // Double the array for seamless infinite scroll only if more than 3 teachers
+  const shouldSlide = teachers.length > 3;
+  const displayTeachers = shouldSlide ? [...teachers, ...teachers] : teachers;
 
   return (
-    <section className="py-20 bg-white overflow-hidden">
-      <h2 className="text-4xl font-bold text-center text-sdblue mb-12">Our Teachers</h2>
-      <div 
-        ref={scrollRef}
-        className={`flex space-x-8 ${teachers.length > 4 ? 'overflow-x-hidden' : 'overflow-x-auto justify-center'}`}
-      >
-        {teachers.map((teacher) => (
-          <div 
-            key={teacher.id}
-            className="flex-none w-64 p-4"
-          >
-            <div className="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105">
-              <img 
-                src={teacher.image} 
-                alt={teacher.name}
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
-              />
-              <h3 className="text-xl font-semibold text-sdblue text-center">{teacher.name}</h3>
-              <p className="text-gray-500 text-center">{teacher.subject}</p>
-              <p className="text-gray-400 text-sm text-center mt-1">{teacher.degree}</p>
+    <section className="py-20 bg-gradient-to-br from-[#E5DEFF] to-[#FDE1D3] overflow-hidden">
+      <h2 className="text-4xl font-bold text-center mb-12 animate-text-shimmer bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#8B5CF6] bg-clip-text text-transparent">
+        Our Expert Teachers
+      </h2>
+      <div className="relative w-full overflow-hidden">
+        <div className={`flex justify-center ${shouldSlide ? 'animate-slideLeft gap-16' : 'gap-8'}`}>
+          {displayTeachers.map((teacher, index) => (
+            <div 
+              key={`${teacher.id}-${index}`}
+              className="flex-none w-72 md:w-80 px-6"
+            >
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                <div className="relative w-48 h-48 mx-auto mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6] to-[#D946EF] rounded-full animate-pulse"></div>
+                  <img 
+                    src={teacher.image} 
+                    alt={teacher.name}
+                    className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full object-cover object-center transform transition-transform duration-300 hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] bg-clip-text text-transparent">
+                    {teacher.name}
+                  </h3>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

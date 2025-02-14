@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -38,37 +37,29 @@ export const EnquiryForm = () => {
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-gradient-to-br from-[#E5DEFF] to-[#FDE1D3]">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-sdblue mb-4">Contact Us</h2>
-        <p className="text-center text-gray-600 mb-12">Feel free to reach out to us for any queries</p>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-8">
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-gray-800">School Address</h3>
-              <div className="flex items-start space-x-4">
-                <MapPin className="w-6 h-6 text-sdblue mt-1" />
-                <p className="text-gray-600">
-                  Basharatpur, Gorakhpur, Uttar Pradesh 273004
+            <div>
+              <h2 className="text-3xl font-bold mb-6">Contact Us</h2>
+              <div className="space-y-4 text-gray-600">
+                <p className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-sdblue" />
+                  Rapti Nagar, Near Shahpur Thana, Gorakhpur
+                </p>
+                <p className="flex items-center gap-2">
+                  <Phone className="w-5 h-5 text-sdblue" />
+                  +918881110745, +917388277496
+                </p>
+                <p className="flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-sdblue" />
+                  sdacademy18@gmail.com
                 </p>
               </div>
             </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-gray-800">Contact Information</h3>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-4">
-                  <Phone className="w-6 h-6 text-sdblue" />
-                  <p className="text-gray-600">+91 123-456-7890</p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <Mail className="w-6 h-6 text-sdblue" />
-                  <p className="text-gray-600">info@school.com</p>
-                </div>
-              </div>
-            </div>
-            
+
+            {/* Map Section */}
             <div className="h-[300px] rounded-lg overflow-hidden shadow-lg">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3561.5956576869307!2d83.3814157752671!3d26.789155976721045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399145015195c359%3A0x477ad60165759ca3!2sS%20D%20ACADEMY%20%26%20TENDERCARE%20PLAYWAY%20RAPTINAGAR%20GORAKHPUR!5e0!3m2!1sen!2sin!4v1738936171984!5m2!1sen!2sin" 
@@ -84,6 +75,7 @@ export const EnquiryForm = () => {
             </div>
           </div>
 
+          {/* Form Section */}
           <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>

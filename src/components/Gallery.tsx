@@ -1,150 +1,221 @@
-
 import { useEffect, useState } from 'react';
-import { Dialog } from '@/components/ui/dialog';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const images = [
   {
-    url: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
-    caption: 'Modern Classroom'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80',
-    caption: 'School Library'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1564981797816-1043664bf78d?auto=format&fit=crop&w=800&q=80',
-    caption: 'Laboratory'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1598618443855-232ee0f819f6?auto=format&fit=crop&w=800&q=80',
-    caption: 'Sports Facilities'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80',
-    caption: 'Assembly Hall'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1444492417251-9c84a5fa18e0?auto=format&fit=crop&w=800&q=80',
-    caption: 'Campus View'
-  },
+    url: './School Building.jpeg',
+    caption: 'School Building',
+    category: 'Campus'
+  }
 ];
+
+// Add GKP Mahotsav images
+const gkpMahotsavImages = [
+  {
+    url: '/GKPMahotsav/Image1.jpeg',
+    caption: 'GKP Mahotsav Cultural Program',
+    category: 'GKP Mahotsav'
+  },
+  {
+    url: '/GKPMahotsav/Image2.jpeg',
+    caption: 'GKP Mahotsav Celebration',
+    category: 'GKP Mahotsav'
+  }
+];
+
+// Add Christmas images
+const christmasImages = [
+  {
+    url: '/Christmas/Christmas1.jpeg',
+    caption: 'Christmas Celebration',
+    category: 'Christmas'
+  },
+  {
+    url: '/Christmas/Christmas2.jpeg',
+    caption: 'Christmas Event',
+    category: 'Christmas'
+  }
+];
+
+// Add Sports images
+const sportsImages = [
+  {
+    url: '/Sports/Sports1.jpeg',
+    caption: 'Sports Day Celebration',
+    category: 'Sports'
+  },
+  {
+    url: '/Sports/Sports2.jpeg',
+    caption: 'Annual Sports Meet',
+    category: 'Sports'
+  },
+  {
+    url: '/Sports/Sports3.jpeg',
+    caption: 'Sports Activities',
+    category: 'Sports'
+  },
+  {
+    url: '/Sports/Sports4.jpeg',
+    caption: 'Sports Competition',
+    category: 'Sports'
+  },
+  {
+    url: '/Sports/Sports5.jpeg',
+    caption: 'Sports Achievement',
+    category: 'Sports'
+  },
+  {
+    url: '/Sports/Sports6.jpeg',
+    caption: 'Sports Event',
+    category: 'Sports'
+  },
+  {
+    url: '/Sports/Sports7.jpeg',
+    caption: 'Sports Program',
+    category: 'Sports'
+  }
+];
+
+// Add Diwali images
+const diwaliImages = [
+  {
+    url: '/Diwali/Diwali1.jpeg',
+    caption: 'Diwali Celebration',
+    category: 'Diwali'
+  }
+];
+
+// Add Yoga images
+const yogaImages = [
+  {
+    url: '/Yoga/Yoga1.jpeg',
+    caption: 'Yoga Session',
+    category: 'Yoga'
+  }
+];
+
+// Add Celebrations and Programs images
+const celebrationsImages = Array.from({ length: 29 }, (_, i) => ({
+  url: `/Celebrations and Programs/image${i + 1}.jpg`,
+  caption: `School Celebration ${i + 1}`,
+  category: 'Celebrations and Programs'
+}));
+
+// Update the combined images array to include new sections
+const allImages = [
+  ...images, 
+  ...gkpMahotsavImages, 
+  ...christmasImages, 
+  ...sportsImages,
+  ...diwaliImages,
+  ...yogaImages,
+  ...celebrationsImages
+];
+
+interface GalleryImage {
+  url: string;
+  caption: string;
+  category: string;
+}
 
 export const Gallery = () => {
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [homeImages, setHomeImages] = useState<any[]>([]);
+  
+  // Combine all images for the main slider
+  const allImages = [
+    ...images,
+    ...gkpMahotsavImages,
+    ...christmasImages,
+    ...sportsImages,
+    ...diwaliImages,
+    ...yogaImages,
+    ...celebrationsImages
+  ];
 
-  useEffect(() => {
-    const allImages = JSON.parse(localStorage.getItem('gallery') || '[]');
-    const selectedHomeImages = allImages.filter((img: any) => img.showOnHome);
-    
-    setHomeImages(selectedHomeImages.length > 0 ? selectedHomeImages : images);
-  }, []);
-
-  useEffect(() => {
-    if (homeImages.length > 0) {
-      const nextIndex = (currentIndex + 1) % homeImages.length;
-      const img = new Image();
-      img.src = homeImages[nextIndex].url;
-    }
-  }, [currentIndex, homeImages]);
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % homeImages.length);
-  };
-
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + homeImages.length) % homeImages.length);
+  // Group images by category
+  const categories = {
+    'Campus': images,
+    'GKP Mahotsav': gkpMahotsavImages,
+    'Christmas': christmasImages,
+    'Sports': sportsImages,
+    'Diwali': diwaliImages,
+    'Yoga': yogaImages,
+    'Celebrations': celebrationsImages
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-[#0EA5E9]/10 to-[#8B5CF6]/10" id="gallery">
+    <section className="py-20 bg-gradient-to-br from-[#E5DEFF] to-[#FDE1D3] overflow-hidden">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 animate-text-shimmer bg-gradient-to-r from-[#0EA5E9] via-[#8B5CF6] to-[#0EA5E9] bg-clip-text text-transparent">
-          School Gallery
+        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#8B5CF6] bg-clip-text text-transparent">
+          Our Gallery
         </h2>
-        
-        <div className="relative max-w-4xl mx-auto">
-          <div className="aspect-[16/9] relative overflow-hidden rounded-2xl shadow-2xl">
-            <img 
-              src={homeImages[currentIndex]?.url} 
-              alt={homeImages[currentIndex]?.caption}
-              className="w-full h-full object-cover transition-all duration-500 hover:scale-105"
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-sm text-white p-6">
-              <p className="text-center text-lg font-medium">{homeImages[currentIndex]?.caption}</p>
-            </div>
-          </div>
-          
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-gradient-to-r hover:from-[#0EA5E9] hover:to-[#8B5CF6] hover:text-white rounded-full transition-all duration-300"
-            onClick={goToPrevious}
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-gradient-to-r hover:from-[#0EA5E9] hover:to-[#8B5CF6] hover:text-white rounded-full transition-all duration-300"
-            onClick={goToNext}
-          >
-            <ChevronRight className="h-6 w-6" />
-          </Button>
+
+        {/* Main Image Slider */}
+        <div className="mb-20">
+          <Carousel className="w-full max-w-6xl mx-auto">
+            <CarouselContent>
+              {allImages.map((image, index) => (
+                <CarouselItem key={index}>
+                  <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
+                    <img
+                      src={image.url}
+                      alt={image.caption}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                      <p className="text-white text-lg font-medium">{image.caption}</p>
+                      <p className="text-white/80 text-sm">{image.category}</p>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden md:flex" />
+            <CarouselNext className="hidden md:flex" />
+          </Carousel>
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mt-8">
-          {homeImages.map((image, index) => (
-            <div 
-              key={index}
-              className={`aspect-square cursor-pointer overflow-hidden rounded-xl transform transition-all duration-300 hover:scale-105 ${
-                currentIndex === index ? 'ring-2 ring-[#8B5CF6]' : ''
-              }`}
-              onClick={() => setCurrentIndex(index)}
-            >
-              <img 
-                src={image.url} 
-                alt={image.caption}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
+        {/* Category Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {Object.entries(categories).map(([category, categoryImages]) => (
+            <div key={category} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+              <h3 className="text-2xl font-semibold text-sdblue mb-4">{category}</h3>
+              
+              {/* Preview Images */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {categoryImages.slice(0, 2).map((image, index) => (
+                  <div key={index} className="aspect-square rounded-lg overflow-hidden">
+                    <img
+                      src={image.url}
+                      alt={image.caption}
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Image count and View All button */}
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">
+                  {categoryImages.length} Photos
+                </span>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate('/gallery', { 
+                    state: { initialCategory: category }
+                  })}
+                  className="bg-white hover:bg-gray-50"
+                >
+                  View All
+                </Button>
+              </div>
             </div>
           ))}
         </div>
-
-        <div className="text-center mt-8">
-          <Button 
-            onClick={() => navigate('/gallery')}
-            className="bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#0EA5E9] text-white font-semibold py-2 px-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
-          >
-            View All Photos
-          </Button>
-        </div>
-
-        <Dialog 
-          open={!!selectedImage} 
-          onOpenChange={() => setSelectedImage(null)}
-        >
-          {selectedImage && (
-            <img 
-              src={selectedImage} 
-              alt="Selected gallery image"
-              className="w-full h-full object-contain"
-              loading="lazy"
-              decoding="async"
-            />
-          )}
-        </Dialog>
       </div>
     </section>
   );

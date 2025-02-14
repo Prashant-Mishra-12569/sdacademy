@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogIn, ChevronDown } from 'lucide-react';
@@ -13,7 +12,7 @@ export const DesktopNav = ({ navItems, handleNavClick }: DesktopNavProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
-    <div className="hidden md:flex md:items-center md:space-x-4">
+    <div className="hidden md:flex md:items-center md:space-x-1 lg:space-x-2">
       {navItems.map((item) => (
         <div 
           key={item.label} 
@@ -23,14 +22,14 @@ export const DesktopNav = ({ navItems, handleNavClick }: DesktopNavProps) => {
         >
           <button
             onClick={() => handleNavClick(item.href)}
-            className={`flex items-center gap-2 text-gray-700 hover:text-sdblue px-3 py-2 text-sm font-medium transition-all duration-300 hover:-translate-y-1 hover:shadow-lg rounded-md ${
-              item.label === 'Admin Login' 
+            className={`flex items-center gap-1 text-gray-700 hover:text-sdblue px-2 lg:px-3 py-2 text-sm font-medium transition-all duration-300 hover:-translate-y-1 hover:shadow-lg rounded-md whitespace-nowrap ${
+              item.label === 'Login' 
                 ? 'bg-gradient-to-r from-sdblue to-blue-600 text-white hover:from-blue-600 hover:to-sdblue' 
                 : ''
             }`}
           >
             <item.icon className="w-4 h-4" />
-            {item.label}
+            <span>{item.label}</span>
             {item.subItems && <ChevronDown className="w-4 h-4 ml-1" />}
           </button>
           
@@ -45,7 +44,7 @@ export const DesktopNav = ({ navItems, handleNavClick }: DesktopNavProps) => {
                   <button
                     key={subItem.label}
                     onClick={() => handleNavClick(subItem.href)}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 whitespace-nowrap"
                   >
                     {subItem.label}
                   </button>

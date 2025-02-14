@@ -1,85 +1,39 @@
+import { useRef } from 'react';
 
-import { useState, useEffect } from 'react';
-
-interface VideoTestimonial {
-  id: number;
-  youtubeUrl: string;
-  type: 'parent' | 'student';
-  name: string;
-  class?: string;
-}
-
-const sampleTestimonials: VideoTestimonial[] = [
-  {
-    id: 1,
-    youtubeUrl: "https://www.youtube.com/embed/YE7VzlLtp-4",
-    type: "parent",
-    name: "Priya Sharma"
-  },
-  {
-    id: 2,
-    youtubeUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
-    type: "student",
-    name: "Rahul Kumar",
-    class: "10"
-  },
-  {
-    id: 3,
-    youtubeUrl: "https://www.youtube.com/embed/YE7VzlLtp-4",
-    type: "parent",
-    name: "Amit Patel"
-  }
+const videos = [
+  "QknDA3_XZjA",
+  "SiKWynHUzcw",
+  "-Ds5b5ER_Wc",
+  "9lDZE_qvR9E",
+  "aKY2ibvIUyU",
+  "JLeqSodEyrU",
+  "cFoHil3b-ow",
+  "Wp5POcpB7Bo",
+  "8WTaFJFvrh8",
+  "xoHUq1yHV0k"
 ];
 
 export const VideoTestimonials = () => {
-  const [hoveredVideo, setHoveredVideo] = useState<number | null>(null);
-  const [testimonials, setTestimonials] = useState<VideoTestimonial[]>([]);
-  
-  useEffect(() => {
-    // Get testimonials from localStorage or use sample data
-    const storedTestimonials = localStorage.getItem('videoTestimonials');
-    if (!storedTestimonials) {
-      localStorage.setItem('videoTestimonials', JSON.stringify(sampleTestimonials));
-      setTestimonials(sampleTestimonials);
-    } else {
-      setTestimonials(JSON.parse(storedTestimonials));
-    }
-  }, []);
-
-  const handleMouseEnter = (id: number) => {
-    setHoveredVideo(id);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredVideo(null);
-  };
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="py-20 bg-gradient-to-br from-purple-50 to-orange-50">
+    <section ref={sectionRef} className="py-12 md:py-20 bg-gradient-to-br from-[#E5DEFF] to-[#FDE1D3]">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-sdblue mb-12 animate-text-shimmer">Video Testimonials</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
-            <div 
-              key={testimonial.id}
-              className="group aspect-[16/9] relative rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              onMouseEnter={() => handleMouseEnter(testimonial.id)}
-              onMouseLeave={handleMouseLeave}
-            >
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] bg-clip-text text-transparent">
+          Video Testimonials
+        </h2>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {videos.map((videoId, index) => (
+            <div key={index} className="aspect-video rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-105">
               <iframe
-                src={testimonial.youtubeUrl}
-                title={`${testimonial.name}'s testimonial`}
                 className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                src={`https://www.youtube.com/embed/${videoId}`}
+                title={`Video testimonial ${index + 1}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                loading="lazy"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white p-4 transform transition-transform duration-300 translate-y-full group-hover:translate-y-0">
-                <p className="font-medium">{testimonial.name}</p>
-                <p className="text-sm capitalize">
-                  {testimonial.type}
-                  {testimonial.class && ` - Class ${testimonial.class}`}
-                </p>
-              </div>
             </div>
           ))}
         </div>

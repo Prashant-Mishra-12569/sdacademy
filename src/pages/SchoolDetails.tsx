@@ -1,4 +1,3 @@
-
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 
@@ -53,12 +52,12 @@ const SchoolDetails = () => {
                 <div>
                   <p className="font-semibold">Address:</p>
                   <p>S.D. Academy & Tendercare Playway</p>
-                  <p>Gorakhpur, Uttar Pradesh</p>
+                  <p>Rapti Nagar, Near Shahpur Thana, Gorakhpur</p>
                 </div>
                 <div>
                   <p className="font-semibold">Contact Details:</p>
-                  <p>Phone: [School Phone Number]</p>
-                  <p>Email: info@sdacademy.edu.in</p>
+                  <p>Phone: +918881110745, +917388277496</p>
+                  <p>Email: sdacademy18@gmail.com</p>
                 </div>
               </div>
             </div>

@@ -1,5 +1,4 @@
-
-import { Mail, Phone, Globe, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { Mail, Phone, Globe, Facebook, Instagram, Youtube } from 'lucide-react';
 
 export const Footer = () => {
   return (
@@ -26,17 +25,17 @@ export const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">Contact Info</h3>
             <div className="space-y-2">
-              <p className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
-                <Mail className="w-5 h-5" />
-                info@sdacademy.edu
-              </p>
-              <p className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
+              <p className="flex items-center gap-2">
                 <Phone className="w-5 h-5" />
-                +1 234 567 890
+                +918881110745, +917388277496
               </p>
-              <p className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
+              <p className="flex items-center gap-2">
+                <Mail className="w-5 h-5" />
+                sdacademy18@gmail.com
+              </p>
+              <p className="flex items-center gap-2">
                 <Globe className="w-5 h-5" />
-                www.sdacademy.edu
+                Rapti Nagar, Near Shahpur Thana, Gorakhpur
               </p>
             </div>
           </div>
@@ -44,14 +43,14 @@ export const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-yellow-300 transition-colors transform hover:scale-110">
+              <a href="https://www.facebook.com/sdagorakhpur/" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300 transition-colors transform hover:scale-110">
                 <Facebook className="w-6 h-6" />
               </a>
-              <a href="#" className="hover:text-yellow-300 transition-colors transform hover:scale-110">
-                <Twitter className="w-6 h-6" />
+              <a href="http://instagram.com/sdagorakhpur" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300 transition-colors transform hover:scale-110">
+                <Instagram className="w-6 h-6" />
               </a>
-              <a href="#" className="hover:text-yellow-300 transition-colors transform hover:scale-110">
-                <Linkedin className="w-6 h-6" />
+              <a href="http://youtube.com/@sdacademygorakhpur" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300 transition-colors transform hover:scale-110">
+                <Youtube className="w-6 h-6" />
               </a>
             </div>
           </div>

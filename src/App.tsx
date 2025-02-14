@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -31,6 +30,20 @@ import EntranceResults from "./pages/EntranceResults";
 import BeyondAcademicPage from "./pages/BeyondAcademicPage";
 import EssentialInfoPage from "./pages/EssentialInfoPage";
 import EssentialInfoDetailPage from "./pages/EssentialInfoDetailPage";
+import UniqueChoice from "./pages/about/UniqueChoice";
+import VisionMission from "./pages/about/VisionMission";
+import SuccessSaga from "./pages/about/SuccessSaga";
+import Affiliation from "./pages/about/Affiliation";
+import Management from "./pages/about/Management";
+import ChairmanMessage from "./pages/about/ChairmanMessage";
+import DirectorMessage from "./pages/about/DirectorMessage";
+import PrincipalMessage from "./pages/about/PrincipalMessage";
+import PublicDisclosure from "./pages/about/PublicDisclosure";
+import Building from "./pages/infrastructure/Building";
+import Safety from "./pages/infrastructure/Safety";
+import SmartClass from "./pages/infrastructure/SmartClass";
+import ComputerLab from "./pages/infrastructure/ComputerLab";
+import Health from "./pages/infrastructure/Health";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +56,15 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/about/unique-choice" element={<UniqueChoice />} />
+          <Route path="/about/vision-mission" element={<VisionMission />} />
+          <Route path="/about/success-saga" element={<SuccessSaga />} />
+          <Route path="/about/affiliation" element={<Affiliation />} />
+          <Route path="/about/management" element={<Management />} />
+          <Route path="/about/chairman-message" element={<ChairmanMessage />} />
+          <Route path="/about/director-message" element={<DirectorMessage />} />
+          <Route path="/about/principal-message" element={<PrincipalMessage />} />
+          <Route path="/about/public-disclosure" element={<PublicDisclosure />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/notices" element={<AdminNotices />} />
           <Route path="/admin/gallery" element={<AdminGallery />} />
@@ -67,6 +89,11 @@ const App = () => (
           <Route path="/beyond-academic" element={<BeyondAcademicPage />} />
           <Route path="/essential-info" element={<EssentialInfoPage />} />
           <Route path="/essential-info/:slug" element={<EssentialInfoDetailPage />} />
+          <Route path="/infrastructure/building" element={<Building />} />
+          <Route path="/infrastructure/safety" element={<Safety />} />
+          <Route path="/infrastructure/smart-class" element={<SmartClass />} />
+          <Route path="/infrastructure/computer-lab" element={<ComputerLab />} />
+          <Route path="/infrastructure/health" element={<Health />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
