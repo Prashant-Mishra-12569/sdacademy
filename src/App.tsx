@@ -44,15 +44,29 @@ import Safety from "./pages/infrastructure/Safety";
 import SmartClass from "./pages/infrastructure/SmartClass";
 import ComputerLab from "./pages/infrastructure/ComputerLab";
 import Health from "./pages/infrastructure/Health";
+import Sports from "@/pages/beyond/Sports";
+import DanceMusic from "@/pages/beyond/DanceMusic";
+import ArtCraft from "@/pages/beyond/ArtCraft";
+import Yoga from "@/pages/beyond/Yoga";
+import SchoolUniform from "@/pages/essential-info/SchoolUniform";
+import SchoolTiming from "@/pages/essential-info/SchoolTiming";
+import Transport from "@/pages/essential-info/Transport";
+import CodeOfConduct from "@/pages/essential-info/CodeOfConduct";
+import SdaNewspaper from "@/pages/essential-info/SdaNewspaper";
+import OnlineRegistration from "@/pages/essential-info/OnlineRegistration";
+import JobEntrance from "@/pages/essential-info/JobEntrance";
+import { AdmissionPopup } from "@/components/AdmissionPopup";
+import { Suspense } from 'react';
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
       <BrowserRouter>
+        <Suspense fallback={null}>
+          <AdmissionPopup />
+        </Suspense>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
@@ -88,14 +102,27 @@ const App = () => (
           <Route path="/school-details" element={<SchoolDetails />} />
           <Route path="/beyond-academic" element={<BeyondAcademicPage />} />
           <Route path="/essential-info" element={<EssentialInfoPage />} />
+          <Route path="/essential-info/school-uniform" element={<SchoolUniform />} />
+          <Route path="/essential-info/school-timing" element={<SchoolTiming />} />
+          <Route path="/essential-info/transport" element={<Transport />} />
+          <Route path="/essential-info/code-of-conduct" element={<CodeOfConduct />} />
+          <Route path="/essential-info/sda-newspaper" element={<SdaNewspaper />} />
+          <Route path="/essential-info/online-registration" element={<OnlineRegistration />} />
+          <Route path="/essential-info/job-entrance" element={<JobEntrance />} />
           <Route path="/essential-info/:slug" element={<EssentialInfoDetailPage />} />
           <Route path="/infrastructure/building" element={<Building />} />
           <Route path="/infrastructure/safety" element={<Safety />} />
           <Route path="/infrastructure/smart-class" element={<SmartClass />} />
           <Route path="/infrastructure/computer-lab" element={<ComputerLab />} />
           <Route path="/infrastructure/health" element={<Health />} />
+          <Route path="/beyond-academic/sports" element={<Sports />} />
+          <Route path="/beyond-academic/dance-music" element={<DanceMusic />} />
+          <Route path="/beyond-academic/art-craft" element={<ArtCraft />} />
+          <Route path="/beyond-academic/yoga" element={<Yoga />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Toaster />
+        <Sonner />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

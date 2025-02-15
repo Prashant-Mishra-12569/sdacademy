@@ -1,94 +1,89 @@
-
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, GraduationCap, Clock, AlertCircle, Trophy, Target } from "lucide-react";
 
 const EntranceResults = () => {
-  const { data: results, isLoading } = useQuery({
-    queryKey: ['entrance-results'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('entrance_results')
-        .select('*')
-        .order('year', { ascending: false });
+  const navigate = useNavigate();
 
-      if (error) throw error;
-      return data;
+  const entranceHighlights = [
+    {
+      exam: "Class XI Entrance Test",
+      achievement: "85% students scored above 90%",
+      year: "2023"
+    },
+    {
+      exam: "Scholarship Test",
+      achievement: "45 students qualified",
+      year: "2023"
+    },
+    {
+      exam: "Talent Search Exam",
+      achievement: "12 district level ranks",
+      year: "2023"
     }
-  });
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Navigation />
-        <div className="pt-20 px-4 md:px-8 max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold text-sdblue mb-8">Entrance Results</h1>
-          <div className="grid md:grid-cols-2 gap-8">
-            {[1, 2].map((i) => (
-              <div key={i} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <Skeleton className="w-full h-64" />
-                <div className="p-6">
-                  <Skeleton className="h-8 w-3/4 mb-4" />
-                  <div className="space-y-3">
-                    {[1, 2, 3, 4].map((j) => (
-                      <Skeleton key={j} className="h-6 w-2/3" />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      <div className="pt-20 px-4 md:px-8 max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-sdblue mb-8">Entrance Results</h1>
-        <div className="grid md:grid-cols-2 gap-8">
-          {results?.map((result) => (
-            <div key={result.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img 
-                src={result.image_url || "https://images.unsplash.com/photo-1498050108023-c5249f4df085"}
-                alt={result.exam_name} 
-                className="w-full h-64 object-cover"
-              />
-              <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  {result.exam_name} {result.year}
-                </h2>
-                <div className="space-y-3">
-                  <p className="text-gray-600">
-                    • Students Qualified: {result.qualified_students}
-                  </p>
-                  <p className="text-gray-600">
-                    • AIR Under 1000: {result.rank_under_1000} students
-                  </p>
-                  <p className="text-gray-600">
-                    • AIR Under 5000: {result.rank_under_5000} students
-                  </p>
-                  {result.top_rank && (
-                    <p className="text-gray-600">
-                      • Top Rank: AIR {result.top_rank}
-                    </p>
-                  )}
-                  {result.achievement_details && (
-                    <p className="text-gray-600">
-                      • {result.achievement_details}
-                    </p>
-                  )}
-                </div>
+      
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center gap-4 mb-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate(-1)}
+            className="hover:bg-gray-100"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <h1 className="text-4xl font-bold text-sdblue">Entrance Exam Results</h1>
+        </div>
+
+        {/* Recent Achievements Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {entranceHighlights.map((highlight, index) => (
+            <div key={index} className="bg-white p-6 rounded-xl shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg flex items-center justify-center mb-4">
+                <Target className="h-6 w-6 text-white" />
               </div>
+              <h3 className="font-bold text-lg mb-2">{highlight.exam}</h3>
+              <p className="text-green-600 font-bold mb-2">{highlight.achievement}</p>
+              <p className="text-gray-600">Year: {highlight.year}</p>
             </div>
           ))}
         </div>
+
+        {/* Under Process Section */}
+        <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl shadow-lg p-8 text-center mb-12">
+          <div className="max-w-2xl mx-auto">
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 mx-auto">
+              <Clock className="h-8 w-8 text-green-600 animate-pulse" />
+            </div>
+            <h2 className="text-2xl font-bold text-green-600 mb-4">School Entrance Results Under Compilation</h2>
+            <p className="text-gray-700 mb-6">
+              Complete entrance examination results including individual rankings and subject-wise 
+              analysis for Class XI admissions are being processed. We will update the information shortly.
+            </p>
+            <div className="flex items-center justify-center gap-2 text-green-600">
+              <AlertCircle className="h-5 w-5" />
+              <span>Final results will be published after verification</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <Button 
+            onClick={() => navigate('/enquiry')}
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg"
+          >
+            Get Detailed Information
+          </Button>
+        </div>
       </div>
+      
       <Footer />
     </div>
   );

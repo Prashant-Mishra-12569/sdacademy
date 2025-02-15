@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Calendar, Book, Users, Phone, LogIn, Award, School, Info, Building, Star } from 'lucide-react';
+import { Calendar, Book, Users, Phone, LogIn, Award, School, Info, Building, Star, Menu, X, ChevronDown } from 'lucide-react';
 import { NavItem } from '@/types/nav';
 import { DesktopNav } from './DesktopNav';
 import { MobileNav } from './MobileNav';
@@ -61,14 +61,14 @@ const navItems: NavItem[] = [
     ]
   },
   {
-    label: 'Beyond',
+    label: 'Beyond Academic',
     href: '/beyond-academic',
-    icon: Award,
+    icon: Star,
     subItems: [
-      { label: 'Sports & Games', href: '/beyond-academic#sports' },
-      { label: 'Dance & Music', href: '/beyond-academic#arts' },
-      { label: 'Art & Craft', href: '/beyond-academic#craft' },
-      { label: 'Yoga', href: '/beyond-academic#yoga' }
+      { label: 'Sports & Games', href: '/beyond-academic/sports' },
+      { label: 'Dance & Music', href: '/beyond-academic/dance-music' },
+      { label: 'Art & Craft', href: '/beyond-academic/art-craft' },
+      { label: 'Yoga', href: '/beyond-academic/yoga' }
     ]
   },
   {
@@ -119,80 +119,112 @@ export const Navigation = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
+  useEffect(() => {
     setIsOpen(false);
-    if (href.includes('#')) {
-      const [path, hash] = href.split('#');
-      navigate(path);
-      setTimeout(() => {
-        const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
     } else {
-      navigate(href);
+      document.body.style.overflow = '';
     }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  const handleNavClick = (href: string) => {
+    navigate(href);
+    setIsOpen(false);
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-white shadow-lg' 
-        : 'bg-gradient-to-r from-white/95 to-blue-50/95 backdrop-blur-md'
-    }`}>
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <div 
-            className="flex items-center gap-2 cursor-pointer" 
-            onClick={() => navigate('/')}
-          >
-            <img 
-              src="/SchoolLogo.png" 
-              alt="School Logo" 
-              className="h-10 w-10 md:h-12 md:w-12 object-contain"
-            />
-            <div className="flex flex-col">
-              <span className="text-base md:text-lg font-bold text-gray-800">
-                SD Academy
-              </span>
-              <span className="text-[10px] md:text-xs text-gray-600">
-                Excellence in Education
-              </span>
+    <>
+      {/* Main Navigation Bar */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled || isOpen ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-md'
+      }`}>
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Logo Section */}
+            <div 
+              className="flex items-center gap-2 cursor-pointer" 
+              onClick={() => navigate('/')}
+            >
+              <img 
+                src="/SchoolLogo.png" 
+                alt="School Logo" 
+                className="h-10 w-10 md:h-12 md:w-12 object-contain"
+              />
+              <div className="flex flex-col">
+                <span className="text-base md:text-lg font-bold text-gray-800">
+                  SD Academy
+                </span>
+                <span className="text-[10px] md:text-xs text-gray-600">
+                  Excellence in Education
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="hidden md:block">
-            <DesktopNav 
-              navItems={navItems} 
-              handleNavClick={handleNavClick}
-            />
-          </div>
+            {/* Desktop Navigation */}
+            <div className="hidden lg:block">
+              <DesktopNav 
+                navItems={navItems} 
+                handleNavClick={handleNavClick}
+              />
+            </div>
 
-          <div className="md:hidden">
-            <MobileNav 
-              navItems={navItems} 
-              handleNavClick={handleNavClick}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-            />
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? (
+                <X className="h-6 w-6 text-gray-800" />
+              ) : (
+                <Menu className="h-6 w-6 text-gray-800" />
+              )}
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Backdrop overlay */}
+        {/* Mobile Navigation Overlay */}
+        <div 
+          className={`fixed inset-0 bg-white transition-transform duration-300 ease-in-out transform ${
+            isOpen ? 'translate-x-0' : 'translate-x-full'
+          } lg:hidden`}
+          style={{
+            top: '64px',
+            height: 'calc(100vh - 64px)',
+            overflowY: 'auto'
+          }}
+        >
+          <MobileNav 
+            navItems={navItems}
+            handleNavClick={handleNavClick}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
+        </div>
+      </nav>
+
+      {/* Mobile Menu Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
           aria-hidden="true"
         />
       )}
-    </nav>
+
+      {/* Spacer */}
+      <div className="h-16 md:h-20" />
+    </>
   );
 };

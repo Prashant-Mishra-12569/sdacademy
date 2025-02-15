@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { NavItem } from '@/types/nav';
 
 interface MobileNavProps {
@@ -9,91 +9,53 @@ interface MobileNavProps {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-export const MobileNav = ({ navItems, handleNavClick, isOpen, setIsOpen }: MobileNavProps) => {
+export const MobileNav = ({ navItems, handleNavClick }: MobileNavProps) => {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   return (
-    <>
-      {/* Menu Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-        aria-label="Toggle menu"
-      >
-        {isOpen ? (
-          <X className="h-6 w-6 text-gray-600" />
-        ) : (
-          <Menu className="h-6 w-6 text-gray-600" />
-        )}
-      </button>
-
-      {/* Mobile Menu */}
-      <div 
-        className={`absolute left-0 right-0 top-16 bg-white shadow-lg transition-all duration-300 ${
-          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
-        style={{
-          maxHeight: isOpen ? 'calc(100vh - 64px)' : '0',
-          overflow: 'hidden'
-        }}
-      >
-        <div className="overflow-y-auto max-h-[calc(100vh-64px)]">
-          {navItems.map((item) => (
-            <div key={item.label} className="border-b border-gray-100">
-              <button
-                className="flex items-center justify-between w-full p-4 hover:bg-gray-50"
-                onClick={() => {
-                  if (item.subItems) {
-                    setOpenSubmenu(openSubmenu === item.label ? null : item.label);
-                  } else {
-                    handleNavClick(item.href);
-                    setIsOpen(false);
-                  }
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  {item.icon && <item.icon className="h-5 w-5 text-gray-600" />}
-                  <span className="text-sm font-medium">{item.label}</span>
-                </div>
-                {item.subItems && (
-                  <ChevronDown 
-                    className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${
-                      openSubmenu === item.label ? 'rotate-180' : ''
-                    }`}
-                  />
-                )}
-              </button>
-
-              {/* Submenu */}
-              {item.subItems && openSubmenu === item.label && (
-                <div className="bg-gray-50">
-                  {item.subItems.map((subItem) => (
-                    <button
-                      key={subItem.label}
-                      className="w-full p-4 pl-12 text-sm text-gray-600 hover:bg-gray-100 text-left"
-                      onClick={() => {
-                        handleNavClick(subItem.href);
-                        setIsOpen(false);
-                      }}
-                    >
-                      {subItem.label}
-                    </button>
-                  ))}
-                </div>
-              )}
+    <div className="px-4 md:px-6 py-2 md:py-4 space-y-1 md:space-y-2">
+      {navItems.map((item, index) => (
+        <div key={index} className="border-b border-gray-100 last:border-0">
+          <div
+            className="flex items-center justify-between py-3 md:py-4 cursor-pointer"
+            onClick={() => {
+              if (item.subItems) {
+                setOpenSubmenu(openSubmenu === item.label ? null : item.label);
+              } else {
+                handleNavClick(item.href);
+              }
+            }}
+          >
+            <div className="flex items-center gap-3 md:gap-4">
+              <item.icon className="h-5 w-5 md:h-6 md:w-6 text-sdblue" />
+              <span className="text-gray-800 font-medium md:text-lg">
+                {item.label}
+              </span>
             </div>
-          ))}
+            {item.subItems && (
+              <ChevronDown 
+                className={`h-5 w-5 md:h-6 md:w-6 text-gray-400 transition-transform duration-200 ${
+                  openSubmenu === item.label ? 'rotate-180' : ''
+                }`}
+              />
+            )}
+          </div>
+          
+          {item.subItems && openSubmenu === item.label && (
+            <div className="pl-10 md:pl-12 pb-2 md:pb-3 space-y-1 md:space-y-2 bg-gray-50 rounded-lg">
+              {item.subItems.map((subItem, subIndex) => (
+                <div
+                  key={subIndex}
+                  className="py-2 md:py-3 px-3 md:px-4 cursor-pointer text-gray-600 md:text-lg hover:text-sdblue hover:bg-gray-100 rounded-md transition-colors"
+                  onClick={() => handleNavClick(subItem.href)}
+                >
+                  {subItem.label}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
-
-      {/* Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[-1]"
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-    </>
+      ))}
+    </div>
   );
 };
