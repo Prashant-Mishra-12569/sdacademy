@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Bell, ArrowLeft } from 'lucide-react';
@@ -8,160 +7,75 @@ import { useIsMobile } from '@/hooks/use-mobile';
 interface Notice {
   id: number;
   title: string;
-  pdfUrl: string;
-  isNew?: boolean;
-  createdAt?: number;
+  date: string;
 }
 
 export const Events = () => {
-  const navigate = useNavigate();
   const [notices, setNotices] = useState<Notice[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const storedNotices = JSON.parse(localStorage.getItem('scrollingNotices') || '[]');
-    
-    const updatedNotices = storedNotices.map((notice: Notice) => {
-      const now = new Date().getTime();
-      const twoDaysAgo = now - (2 * 24 * 60 * 60 * 1000);
-      
-      if (!notice.createdAt) {
-        return { ...notice, isNew: false };
-      }
-      
-      return {
-        ...notice,
-        isNew: notice.createdAt > twoDaysAgo
-      };
-    });
-
-    setNotices(updatedNotices);
-  }, []);
-
-  const handleNoticeClick = (pdfUrl: string) => {
-    if (!pdfUrl) {
-      toast({
-        title: "Error",
-        description: "Invalid PDF URL",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const newWindow = window.open(pdfUrl, '_blank');
-      if (newWindow === null) {
+    const fetchNotices = async () => {
+      try {
+        const response = await fetch('/api/notices');
+        const data = await response.json();
+        setNotices(data.slice(0, 5)); // Show only 5 latest notices
+      } catch (error) {
+        console.error('Error fetching notices:', error);
         toast({
-          title: "Error",
-          description: "Popup blocked. Please allow popups for this site.",
-          variant: "destructive"
+          title: "Error loading notices",
+          description: "Please try again later",
+          variant: "destructive",
         });
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error opening PDF:', error);
-      toast({
-        title: "Error",
-        description: "Failed to open PDF",
-        variant: "destructive"
-      });
-    }
-  };
+    };
 
-  const handleBack = () => {
-    setIsOpen(false);
-  };
+    fetchNotices();
+  }, [toast]);
 
-  if (!isMobile) {
-    return (
-      <div className="absolute top-0 right-0 w-[250px] h-screen bg-gradient-to-br from-[#243949] to-[#517fa4] shadow-2xl">
-        <div className="bg-[#8B1D47] p-4 border-b border-white/20">
-          <h2 className="text-xl font-bold text-white tracking-wide text-center">
-            NOTICE & CIRCULARS
-          </h2>
-        </div>
-        
-        <div className="h-[calc(100vh-64px)] overflow-y-auto">
-          {notices.map((notice) => (
-            <div
-              key={notice.id}
-              className="relative border-b border-white/10 transition-all duration-300"
-              onClick={() => handleNoticeClick(notice.pdfUrl)}
-            >
-              <div className="p-4 hover:bg-white/5 cursor-pointer">
-                <div className="flex items-start gap-3">
-                  <span className="text-white mt-1">♦</span>
-                  <div className="flex-1">
-                    <p className="text-white text-sm font-medium">
-                      {notice.title}
-                      {notice.isNew && (
-                        <span className="ml-2 inline-flex items-center px-2 py-0.5 text-[10px] font-bold bg-red-600 text-white rounded-sm">
-                          NEW
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-500/20 to-transparent" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+  if (loading) {
+    return null; // Don't show anything while loading
   }
 
   return (
     <>
-      {/* Mobile Notice Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 left-4 z-50 bg-[#ea384c] text-white px-4 py-2 rounded-md font-bold shadow-lg hover:bg-red-600 transition-colors"
-      >
-        NOTICE
-      </button>
-
-      {/* Mobile Notice Panel */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-gradient-to-b from-[#1a2942] to-[#2c4562] z-50">
-          <div className="flex items-center gap-4 bg-[#8B1D47] p-4 border-b border-white/20">
-            <button
-              onClick={handleBack}
-              className="text-white hover:text-gray-200"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <h2 className="text-xl font-bold text-white tracking-wide">
-              NOTICE & CIRCULARS
-            </h2>
+      {notices.length > 0 && (
+        <div className="fixed top-[80px] right-0 z-40 w-72 md:w-80 lg:w-96 bg-white/95 backdrop-blur-sm shadow-lg rounded-l-xl overflow-hidden transition-transform duration-300 transform hover:translate-x-0 translate-x-[calc(100%-2rem)] hover:shadow-xl">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-[#8B1D47] to-[#ea384c] p-4 flex items-center gap-2">
+            <Bell className="h-5 w-5 text-white animate-bounce" />
+            <h2 className="text-lg font-semibold text-white">NOTICE & CIRCULARS</h2>
           </div>
-          
-          <div className="h-[calc(100vh-64px)] overflow-y-auto">
+
+          {/* Notices Container */}
+          <div className="max-h-[calc(100vh-280px)] overflow-y-auto">
             {notices.map((notice) => (
               <div
                 key={notice.id}
-                className="relative border-b border-white/10 transition-all duration-300"
-                onClick={() => handleNoticeClick(notice.pdfUrl)}
+                className="p-4 border-b border-gray-200 hover:bg-blue-50/50 transition-colors duration-200"
               >
-                <div className="p-4 hover:bg-white/5 cursor-pointer">
-                  <div className="flex items-start gap-3">
-                    <span className="text-white mt-1">♦</span>
-                    <div className="flex-1">
-                      <p className="text-white text-sm font-medium">
-                        {notice.title}
-                        {notice.isNew && (
-                          <span className="ml-2 inline-flex items-center px-2 py-0.5 text-[10px] font-bold bg-red-600 text-white rounded-sm">
-                            NEW
-                          </span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-500/20 to-transparent" />
+                <h3 className="font-medium text-gray-800 mb-1">{notice.title}</h3>
+                <p className="text-sm text-gray-500">{notice.date}</p>
               </div>
             ))}
+
+            {/* View All Button */}
+            <button
+              onClick={() => navigate('/notices')}
+              className="w-full p-4 text-center text-[#8B1D47] hover:bg-red-50 transition-colors duration-200 font-medium"
+            >
+              View All Notices
+            </button>
+          </div>
+
+          {/* Pull Tab */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 bg-[#8B1D47] text-white p-2 rounded-l-lg cursor-pointer shadow-md transform -translate-x-full hover:bg-[#ea384c] transition-colors">
+            <Bell className="h-4 w-4" />
           </div>
         </div>
       )}

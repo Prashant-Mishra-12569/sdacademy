@@ -83,7 +83,7 @@ const SmartClass = () => {
         {/* Hero Section */}
         <div className="relative rounded-xl overflow-hidden mb-16 group">
           <img 
-            src="https://plus.unsplash.com/premium_photo-1681248156471-5682ce52c46c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fHNtYXJ0JTIwY2xhc3MlMjBib2FyZHxlbnwwfHwwfHx8MA%3D%3D"
+            src="/smartclass/smartclasssd1.jpeg"
             alt="Smart Classroom" 
             className="w-full h-[500px] object-cover object-center transform transition-transform duration-500 group-hover:scale-105"
           />
@@ -114,6 +114,39 @@ const SmartClass = () => {
               <p className="text-gray-600">{feature.description}</p>
             </div>
           ))}
+        </div>
+
+        {/* Smart Class Gallery */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-sdblue mb-8 text-center">Our Smart Classrooms</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+              <img 
+                src="/smartclass/smartclasssd1.jpeg"
+                alt="Smart Classroom 1" 
+                className="w-full h-[300px] object-cover object-center transform transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end">
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white">Interactive Learning Space</h3>
+                  <p className="text-blue-50">Modern digital tools for enhanced education</p>
+                </div>
+              </div>
+            </div>
+            <div className="group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+              <img 
+                src="/smartclass/smartclasssd2.jpeg"
+                alt="Smart Classroom 2" 
+                className="w-full h-[300px] object-cover object-center transform transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end">
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white">Digital Teaching Environment</h3>
+                  <p className="text-blue-50">Advanced technology for better learning outcomes</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Benefits Section */}

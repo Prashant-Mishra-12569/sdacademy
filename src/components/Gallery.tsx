@@ -1,10 +1,106 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Button } from './ui/button';
-import { useNavigate } from 'react-router-dom';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { motion, AnimatePresence } from 'framer-motion';
 
+interface GalleryImage {
+  url: string;
+  caption: string;
+  category: string;
+}
+
+interface GallerySliderProps {
+  images: string[];
+  autoPlayInterval?: number;
+}
+
+// Gallery slider component for reusability
+const GallerySlider = ({ images, autoPlayInterval = 5000 }: GallerySliderProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isAutoPlaying) {
+      interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % images.length);
+      }, autoPlayInterval);
+    }
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, images.length, autoPlayInterval]);
+
+  const handlePrevious = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const handleNext = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const handleDotClick = (index: number) => {
+    setIsAutoPlaying(false);
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden group">
+      {/* Main Image */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0"
+        >
+          <img
+            src={images[currentIndex]}
+            alt={`Gallery image ${currentIndex + 1}`}
+            className="w-full h-full object-cover"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={handlePrevious}
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#003049]/50 hover:bg-[#003049]/70 text-white p-2 rounded-full 
+          opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        aria-label="Previous image"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={handleNext}
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#003049]/50 hover:bg-[#003049]/70 text-white p-2 rounded-full 
+          opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        aria-label="Next image"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
+      {/* Navigation Dots */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center space-x-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => handleDotClick(index)}
+            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 
+              ${index === currentIndex ? 'bg-white w-4' : 'bg-white/60 hover:bg-white/80'}`}
+            aria-label={`Go to image ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Main gallery data
 const images = [
   {
     url: './School Building.jpeg',
@@ -106,7 +202,7 @@ const celebrationsImages = Array.from({ length: 29 }, (_, i) => ({
 }));
 
 // Update the combined images array to include new sections
-const allImages = [
+const galleryImages = [
   ...images, 
   ...gkpMahotsavImages, 
   ...christmasImages, 
@@ -116,27 +212,12 @@ const allImages = [
   ...celebrationsImages
 ];
 
-interface GalleryImage {
-  url: string;
-  caption: string;
-  category: string;
-}
-
+// Main Gallery component that's exported
 export const Gallery = () => {
   const navigate = useNavigate();
-  
-  // Combine all images for the main slider
-  const allImages = [
-    ...images,
-    ...gkpMahotsavImages,
-    ...christmasImages,
-    ...sportsImages,
-    ...diwaliImages,
-    ...yogaImages,
-    ...celebrationsImages
-  ];
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
-  // Group images by category
   const categories = {
     'Campus': images,
     'GKP Mahotsav': gkpMahotsavImages,
@@ -148,59 +229,47 @@ export const Gallery = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-[#E5DEFF] to-[#FDE1D3] overflow-hidden">
+    <section className="py-20 bg-[#003049]/5">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#8B5CF6] bg-clip-text text-transparent">
+        <h2 className="text-4xl font-bold text-center mb-12 text-[#003049]">
           Our Gallery
         </h2>
 
         {/* Main Image Slider */}
         <div className="mb-20">
-          <Carousel className="w-full max-w-6xl mx-auto">
-            <CarouselContent>
-              {allImages.map((image, index) => (
-                <CarouselItem key={index}>
-                  <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
-                    <img
-                      src={image.url}
-                      alt={image.caption}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                      <p className="text-white text-lg font-medium">{image.caption}</p>
-                      <p className="text-white/80 text-sm">{image.category}</p>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
+          <GallerySlider images={galleryImages.map(img => img.url)} />
         </div>
 
         {/* Category Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {Object.entries(categories).map(([category, categoryImages]) => (
-            <div key={category} className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-              <h3 className="text-2xl font-semibold text-sdblue mb-4">{category}</h3>
+            <div key={category} 
+              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-[#003049]/10"
+            >
+              <h3 className="text-2xl font-semibold text-[#003049] mb-4">{category}</h3>
               
               {/* Preview Images */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 {categoryImages.slice(0, 2).map((image, index) => (
-                  <div key={index} className="aspect-square rounded-lg overflow-hidden">
+                  <motion.div 
+                    key={index} 
+                    className="aspect-square rounded-lg overflow-hidden shadow-md"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <img
                       src={image.url}
                       alt={image.caption}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-cover"
+                      onClick={() => setSelectedImage(image)}
                     />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
               {/* Image count and View All button */}
               <div className="flex items-center justify-between">
-                <span className="text-gray-600">
+                <span className="text-[#003049]/70">
                   {categoryImages.length} Photos
                 </span>
                 <Button
@@ -208,7 +277,7 @@ export const Gallery = () => {
                   onClick={() => navigate('/gallery', { 
                     state: { initialCategory: category }
                   })}
-                  className="bg-white hover:bg-gray-50"
+                  className="bg-[#003049] text-white hover:bg-[#003049]/90 transition-colors"
                 >
                   View All
                 </Button>
@@ -217,6 +286,54 @@ export const Gallery = () => {
           ))}
         </div>
       </div>
+
+      {/* Image Preview Dialog */}
+      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+        <DialogContent className="max-w-5xl mx-auto bg-white">
+          {selectedImage && (
+            <div className="relative">
+              <img
+                src={selectedImage.url}
+                alt={selectedImage.caption}
+                className="w-full h-auto rounded-lg"
+              />
+              <Button
+                onClick={() => setSelectedImage(null)}
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2 text-white hover:bg-[#003049]/20"
+              >
+                <X className="h-6 w-6" />
+              </Button>
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#003049] to-transparent rounded-b-lg">
+                <h3 className="text-white font-medium text-lg">{selectedImage.caption}</h3>
+                <p className="text-white/80 text-sm">{selectedImage.category}</p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Mobile Navigation Overlay */}
+      <div className="lg:hidden fixed bottom-4 left-0 right-0 px-4 z-50">
+        <div className="bg-white rounded-full shadow-lg p-2 flex justify-around border border-[#003049]/10">
+          {Object.keys(categories).map((category) => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                selectedCategory === category
+                  ? 'bg-[#003049] text-white'
+                  : 'text-[#003049] hover:bg-[#003049]/10'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };
+
+export default Gallery;

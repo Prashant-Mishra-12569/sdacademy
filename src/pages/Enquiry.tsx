@@ -110,15 +110,26 @@ const Enquiry = () => {
             </div>
 
             {/* Right Section - Map */}
-            <div className="rounded-xl overflow-hidden shadow-lg">
+            <div className="rounded-xl overflow-hidden shadow-lg bg-white">
+              <div className="p-4 bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6]">
+                <h2 className="text-xl font-semibold text-white">Our Location</h2>
+                <p className="text-blue-50">S D ACADEMY & TENDERCARE PLAYWAY RAPTINAGAR GORAKHPUR</p>
+              </div>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3558.3446543788367!2d83.35655827499171!3d26.89031447679721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3991446a0c332939%3A0x2d3146a0c0884722!2sS.D.%20ACADEMY!5e0!3m2!1sen!2sin!4v1708612805399!5m2!1sen!2sin"
-                className="w-full h-full min-h-[500px]"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3561.5956576869316!2d83.38141577482695!3d26.789155976721023!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399145015195c359%3A0x477ad60165759ca3!2sS%20D%20ACADEMY%20%26%20TENDERCARE%20PLAYWAY%20RAPTINAGAR%20GORAKHPUR!5e0!3m2!1sen!2sin!4v1739810994986!5m2!1sen!2sin"
+                className="w-full h-[500px]"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
+              <div className="p-4 bg-white">
+                <div className="flex flex-col gap-2">
+                  <p className="font-semibold text-gray-700">Address:</p>
+                  <p className="text-gray-600">Raptinagar, Gorakhpur, Uttar Pradesh, India</p>
+                  <p className="text-blue-600 font-medium">Get directions on Google Maps →</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

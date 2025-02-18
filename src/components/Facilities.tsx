@@ -12,7 +12,7 @@ const facilities = [
     title: "Science Lab",
     description: "Well-equipped laboratories for practical learning",
     icon: Microscope,
-    image: "/sciencelab.jpeg"
+    image: "/sciencelab1.jpeg"
   },
   {
     title: "Sports Complex",

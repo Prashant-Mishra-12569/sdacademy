@@ -1,37 +1,23 @@
-
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
-import { Events } from "./Events";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { NoticesDrawer } from "./NoticesDrawer";
 
 const backgroundImages = [
-  'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1564981797816-1043664bf78d?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1598618443855-232ee0f819f6?auto=format&fit=crop&w=1920&q=80',
+  '/homeImage/1.jpeg',
+  '/homeImage/2.jpg',
+  '/homeImage/3.jpeg',
+  '/homeImage/4.jpeg',
+  '/homeImage/5.jpg',
+  '/homeImage/6.jpg'
 ];
 
 export const Hero = () => {
-  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showTitle, setShowTitle] = useState(false);
-  const [showSubtitle, setShowSubtitle] = useState(false);
-  const [showButton, setShowButton] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Preload images
-    backgroundImages.forEach((url) => {
-      const img = new Image();
-      img.src = url;
-    });
-
-    // Show elements with animation
-    setTimeout(() => setShowTitle(true), 500);
-    setTimeout(() => setShowSubtitle(true), 1500);
-    setTimeout(() => setShowButton(true), 2000);
-
-    // Auto slide every 5 seconds
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
     }, 5000);
@@ -39,85 +25,170 @@ export const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const nextSlide = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + backgroundImages.length) % backgroundImages.length);
+  };
+
   return (
-    <div className="relative h-screen w-full overflow-hidden">
-      {backgroundImages.map((url, index) => (
-        <div
-          key={url}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <img
-            src={url}
-            alt={`School Environment ${index + 1}`}
-            className="w-full h-full object-cover transform scale-105 transition-transform duration-10000 ease-linear"
-            style={{
-              transform: index === currentImageIndex ? 'scale(1.1)' : 'scale(1)',
-            }}
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+    <section className="relative h-screen">
+      {/* Desktop Layout */}
+      <div className="hidden md:flex h-[calc(100vh-3.5rem)]">
+        {/* Image Slider (75% width on desktop) */}
+        <div className="relative w-[75%] h-full overflow-hidden">
+          {backgroundImages.map((image, index) => (
+            <div
+              key={image}
+              className="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
+              style={{
+                opacity: currentImageIndex === index ? 1 : 0,
+                zIndex: currentImageIndex === index ? 1 : 0,
+              }}
+            >
+              <img
+                src={image}
+                alt={`School Background ${index + 1}`}
+                className="w-full h-full object-cover"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+              {/* Removed the overlay div to keep images clean */}
+            </div>
+          ))}
+
+          {/* Buttons at bottom */}
+          <div className="absolute bottom-8 left-0 right-0 z-10 flex justify-center gap-4 px-4">
+            <Button
+              onClick={() => navigate('/about')}
+              className="bg-white hover:bg-gray-100 text-[#003049] px-6 py-1.5 text-sm rounded-full transform transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-1.5 w-28"
+            >
+              Explore More
+              <ChevronRight className="h-3 w-3" />
+            </Button>
+            
+            <Button
+              onClick={() => navigate('/enquiry')}
+              className="bg-[#003049] hover:bg-[#003049] text-white px-6 py-1.5 text-sm rounded-full transform transition-all duration-300 hover:scale-105 shadow-lg w-28"
+            >
+              Apply Now
+            </Button>
+          </div>
+
+          {/* Navigation Arrows */}
+          <button 
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button 
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+
+          {/* Slide Indicators */}
+          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+            {backgroundImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentImageIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  currentImageIndex === index ? 'bg-white w-4' : 'bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
         </div>
-      ))}
 
-      <div className="absolute inset-0 flex items-center">
-        <div className="text-center space-y-6 px-4 max-w-4xl mx-auto">
-          <div
-            className={`transform transition-all duration-1000 ${
-              showTitle ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-            }`}
-          >
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-4 tracking-wider drop-shadow-2xl">
-              <span className="inline-block hover:scale-110 transition-transform duration-300 animate-text-shimmer bg-gradient-to-r from-[#F97316] to-[#FBBF24] bg-clip-text text-transparent">S.</span>
-              <span className="inline-block hover:scale-110 transition-transform duration-300 animate-text-shimmer bg-gradient-to-r from-[#F97316] to-[#FBBF24] bg-clip-text text-transparent ml-2">D.</span>
-              <span className="inline-block hover:scale-110 transition-transform duration-300 animate-text-shimmer bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] bg-clip-text text-transparent ml-2">Academy</span>
-            </h1>
-          </div>
+        {/* Notice Board (25% width on desktop) */}
+        <div className="w-[25%] h-full">
+          <NoticesDrawer />
+        </div>
+      </div>
 
-          <div
-            className={`transform transition-all duration-1000 ${
-              showSubtitle ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-            }`}
-          >
-            <p className="text-2xl md:text-3xl text-[#FBBF24] font-light drop-shadow-lg">
-              Shaping Tomorrow's Leaders Today
-            </p>
-          </div>
-
-          <div
-            className={`transform transition-all duration-1000 ${
-              showButton ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-            }`}
-          >
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#0EA5E9] text-white text-xl px-8 py-6 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm"
-                onClick={() => navigate('/school-details')}
+      {/* Mobile Layout */}
+      <div className="md:hidden flex flex-col">
+        {/* Mobile Image Slider Container */}
+        <div className="relative w-full aspect-[16/9] bg-black">
+          {/* Image Slider */}
+          <div className="relative w-full h-full">
+            {backgroundImages.map((image, index) => (
+              <div
+                key={image}
+                className="absolute inset-0 w-full h-full transition-all duration-500 ease-in-out"
+                style={{
+                  opacity: currentImageIndex === index ? 1 : 0,
+                  zIndex: currentImageIndex === index ? 1 : 0,
+                }}
               >
-                Explore More
-                <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-2 border-[#FBBF24] text-[#FBBF24] hover:bg-[#FBBF24]/10 hover:text-[#FCD34D] text-xl px-8 py-6 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm"
-                onClick={() => navigate('/admission')}
-              >
-                Apply Now
-              </Button>
+                <img
+                  src={image}
+                  alt={`School Highlight ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+                {/* Removed the overlay div to keep images clean */}
+              </div>
+            ))}
+
+            {/* Navigation Arrows */}
+            <button 
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+
+            {/* Slide Indicators */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+              {backgroundImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentImageIndex === index ? 'bg-white w-4' : 'bg-white/50'
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Sticky Notice Section */}
-      <div className="absolute top-0 right-0 h-full">
-        <Events />
+        {/* Mobile Buttons - Below Slider */}
+        <div className="w-full bg-gradient-to-b from-black to-[#003049] py-3">
+          <div className="flex justify-center gap-4 px-4">
+            <Button
+              onClick={() => navigate('/about')}
+              className="bg-white hover:bg-gray-100 text-[#003049] px-5 py-1.5 text-sm rounded-full transform transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-1.5 w-28"
+            >
+              Explore More
+              <ChevronRight className="h-3 w-3" />
+            </Button>
+            
+            <Button
+              onClick={() => navigate('/enquiry')}
+              className="bg-[#003049] hover:bg-[#003049] text-white px-5 py-1.5 text-sm rounded-full transform transition-all duration-300 hover:scale-105 shadow-lg w-28"
+            >
+              Apply Now
+            </Button>
+          </div>
+        </div>
+
+        {/* Notice Board Below Content on Mobile */}
+        <div className="w-full animate-slideUp">
+          <NoticesDrawer />
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
-

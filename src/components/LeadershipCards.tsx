@@ -9,16 +9,22 @@ const leaders = [
     image: '/Founder.jpeg'
   },
   {
+    title: 'Director',
+    name: 'Mr. Rajesh Singh',
+    message: 'Ensuring smooth operations and maintaining high standards in all aspects of our institution.',
+    image: '/Director.jpeg'
+  },
+  {
     title: 'Principal',
     name: 'Mrs. Shruti Singh',
     message: 'At S.D. Academy, we believe in nurturing not just academic excellence, but character and creativity.',
     image: '/Principal.jpeg'
   },
   {
-    title: 'Director',
-    name: 'Mr. Rajesh Singh',
-    message: 'Ensuring smooth operations and maintaining high standards in all aspects of our institution.',
-    image: '/Director.jpeg'
+    title: 'Academic Head',
+    name: 'Dr. Anju Gaur',
+    message: 'We focus on holistic development through innovative teaching methodologies and personalized attention.',
+    image: '/Academic head.jpeg'
   }
 ];
 
@@ -31,7 +37,7 @@ export const LeadershipCards = () => {
         <h2 className="text-4xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] to-[#D946EF]">
           Our Leadership
         </h2>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto">
           {leaders.map((leader, index) => (
             <Card 
               key={index}
@@ -41,8 +47,8 @@ export const LeadershipCards = () => {
               onMouseEnter={() => setActiveCard(index)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              <div className="p-6">
-                <div className="relative w-48 h-48 mx-auto mb-6">
+              <div className="p-4 lg:p-6">
+                <div className="relative w-32 sm:w-40 lg:w-48 h-32 sm:h-40 lg:h-48 mx-auto mb-4 lg:mb-6">
                   <div className="w-full h-full rounded-full overflow-hidden border-4 border-[#8B5CF6] shadow-lg transform transition-transform duration-500 hover:rotate-6">
                     <img 
                       src={leader.image} 
@@ -58,12 +64,12 @@ export const LeadershipCards = () => {
                     />
                   </div>
                 </div>
-                <div className="text-center space-y-3">
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-transparent bg-clip-text">
+                <div className="text-center space-y-2 lg:space-y-3">
+                  <h3 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-transparent bg-clip-text">
                     {leader.title}
                   </h3>
-                  <h4 className="text-xl font-semibold text-[#0EA5E9]">{leader.name}</h4>
-                  <p className="text-gray-600 leading-relaxed">{leader.message}</p>
+                  <h4 className="text-lg lg:text-xl font-semibold text-[#0EA5E9]">{leader.name}</h4>
+                  <p className="text-gray-600 leading-relaxed text-sm lg:text-base">{leader.message}</p>
                 </div>
               </div>
             </Card>

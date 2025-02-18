@@ -146,7 +146,7 @@ const Yoga = () => {
           </div>
           <div className="relative h-64 rounded-xl overflow-hidden group">
             <img 
-              src="/Celebrations and Programs/image25.jpg"
+              src="/Yoga/yoganew.jpg"
               alt="Yoga Session 2"
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             />
@@ -154,7 +154,7 @@ const Yoga = () => {
           </div>
           <div className="relative h-64 rounded-xl overflow-hidden group">
             <img 
-              src="/Celebrations and Programs/image26.jpg"
+              src="/Yoga/yoganew1.jpg"
               alt="Yoga Session 3"
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             />

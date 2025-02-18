@@ -78,7 +78,7 @@ const DanceMusic = () => {
         {/* Hero Section */}
         <div className="relative h-[400px] rounded-xl overflow-hidden mb-12">
           <img 
-            src="/Celebrations and Programs/image15.jpg"
+            src="/Art and Crafts/art3.jpg"
             alt="Dance and Music at SD Academy"
             className="w-full h-full object-cover"
           />
@@ -127,10 +127,10 @@ const DanceMusic = () => {
 
         {/* Gallery Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-          {[16, 17, 18].map((num) => (
+          {[1, 2, 3].map((num) => (
             <div key={num} className="relative h-64 rounded-xl overflow-hidden group">
               <img 
-                src={`/Celebrations and Programs/image${num}.jpg`}
+                src={`/Art and Crafts/art${num}.jpg`}
                 alt={`Dance and Music Activity ${num}`}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               />

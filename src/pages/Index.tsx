@@ -2,7 +2,7 @@ import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { LeadershipCards } from "@/components/LeadershipCards";
 import { TeachersSection } from "@/components/TeachersSection";
-import { Gallery } from "@/components/Gallery";
+import Gallery from "@/components/Gallery";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { VideoTestimonials } from "@/components/VideoTestimonials";
 import { Facilities } from "@/components/Facilities";
@@ -17,6 +17,7 @@ const Index = () => {
   const teachersRef = useScrollAnimation();
   const videoTestimonialsRef = useScrollAnimation();
   const facilitiesRef = useScrollAnimation();
+  const galleryRef = useScrollAnimation();
   const enquiryRef = useScrollAnimation();
 
   const scrollToSection = useCallback((hash: string) => {
@@ -32,6 +33,15 @@ const Index = () => {
     }
   }, [location.hash, scrollToSection]);
 
+  useEffect(() => {
+    // Handle scroll to sections
+    const hash = location.hash;
+    if (hash === '#teachers') {
+      const element = document.getElementById('teachers');
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen">
       <Navigation />
@@ -41,7 +51,11 @@ const Index = () => {
         <LeadershipCards />
       </div>
       
-      <div ref={teachersRef} className="transition-transform duration-300 will-change-transform">
+      <div 
+        id="teachers" 
+        ref={teachersRef} 
+        className="transition-transform duration-300 will-change-transform"
+      >
         <TeachersSection />
       </div>
       
@@ -53,7 +67,13 @@ const Index = () => {
         <VideoTestimonials />
       </div>
 
-      <Gallery />
+      <div 
+        id="gallery" 
+        ref={galleryRef} 
+        className="transition-transform duration-300 will-change-transform"
+      >
+        <Gallery />
+      </div>
       
       <div ref={enquiryRef} className="transition-transform duration-300 will-change-transform">
         <EnquiryForm />
